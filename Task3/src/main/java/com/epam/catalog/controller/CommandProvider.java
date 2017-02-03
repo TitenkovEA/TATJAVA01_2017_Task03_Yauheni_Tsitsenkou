@@ -17,4 +17,8 @@ public class CommandProvider {
         commandMap.put(CommandName.ADD_NEWS, new AddNews());
         commandMap.put(CommandName.FIND_NEWS, new FindNews());
     }
+
+    public Command getCommand(String commandName) {
+        return commandMap.get(commandName);
+    }
 }
