@@ -3,6 +3,7 @@ package com.epam.catalog.controller;
 import com.epam.catalog.controller.command.Command;
 import com.epam.catalog.controller.command.impl.AddNews;
 import com.epam.catalog.controller.command.impl.FindNews;
+import com.epam.catalog.controller.command.impl.WrongRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +11,26 @@ import java.util.Map;
 /**
  * Created by Yauheni_Tsitsenkou on 2/1/2017.
  */
-public class CommandProvider {
-    private final Map<CommandName, Command> commandMap = new HashMap<CommandName, Command>();
+class CommandProvider {
+    private final Map<CommandName, Command> commandMap = new HashMap<>();
 
     CommandProvider() {
         commandMap.put(CommandName.ADD_NEWS, new AddNews());
         commandMap.put(CommandName.FIND_NEWS, new FindNews());
+        commandMap.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
-    public Command getCommand(String commandName) {
-        return commandMap.get(commandName);
+    Command getCommand(String name) {
+        CommandName commandName;
+        Command command;
+
+        try {
+            commandName = CommandName.valueOf(name.toUpperCase());
+            command = commandMap.get(commandName);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            command = commandMap.get(CommandName.WRONG_REQUEST);
+        }
+
+        return command;
     }
 }
