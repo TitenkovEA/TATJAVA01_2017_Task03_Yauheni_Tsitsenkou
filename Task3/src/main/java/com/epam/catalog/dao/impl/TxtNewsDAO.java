@@ -4,6 +4,8 @@ import com.epam.catalog.been.Category;
 import com.epam.catalog.been.News;
 import com.epam.catalog.dao.NewsDAO;
 import com.epam.catalog.dao.exception.DAOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,18 +18,22 @@ import java.util.List;
  * Created by Yauheni_Tsitsenkou on 2/1/2017.
  */
 public class TxtNewsDAO implements NewsDAO {
+    private static final Logger logger = LogManager.getLogger(TxtNewsDAO.class);
+
     private static final String FILE_PATH = "data.txt";
     private static final String ARGS_DELIMITER = "\\|";
 
     public void addNews(News news) throws DAOException {
         if (news == null || news.getCategory() == null ||
                 news.getTitle() == null || news.getAuthor() == null ) {
-            throw new DAOException();
+            logger.error("NullPointer error!");
+            throw new DAOException("NullPointer error!");
         }
 
         try (FileWriter writer = new FileWriter(FILE_PATH, true)) {
             writer.write(news.getCategory() + "|" + news.getTitle() + "|" + news.getAuthor() + "\n");
         } catch (IOException e) {
+            logger.error(e.getMessage());
             throw new DAOException(e);
         }
     }
@@ -35,7 +41,8 @@ public class TxtNewsDAO implements NewsDAO {
     public List<News> findNews(News news) throws DAOException {
         if (news == null || news.getCategory() == null ||
                 news.getTitle() == null || news.getAuthor() == null ) {
-            throw new DAOException();
+            logger.error("NullPointer error!");
+            throw new DAOException("NullPointer error!");
         }
 
         List<News> foundedNews = new ArrayList<>();
@@ -59,8 +66,9 @@ public class TxtNewsDAO implements NewsDAO {
 
                 line = reader.readLine();
             }
-        } catch (IOException | NullPointerException | IllegalArgumentException |
+        } catch (IOException | IllegalArgumentException |
                 ArrayIndexOutOfBoundsException e) {
+            logger.error(e.getMessage());
             throw new DAOException(e);
         }
 
