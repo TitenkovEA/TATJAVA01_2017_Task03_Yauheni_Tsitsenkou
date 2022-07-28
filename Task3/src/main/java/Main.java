@@ -28,3 +28,5 @@ public class Main {
         view.sendRequest(request);
     }
 }
+
+Люблю тебя
